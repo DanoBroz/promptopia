@@ -35,6 +35,7 @@ const MyProfile = () => {
     useEffect(() => {
         const fetchPosts = async () => {
             const response = await fetch(
+                // @ts-ignore
                 `/api/users/${session?.user.id}/posts`
             );
             const data = await response.json();
@@ -42,7 +43,9 @@ const MyProfile = () => {
             setPosts(data);
         };
 
+        // @ts-ignore
         if (session?.user.id) fetchPosts();
+        // @ts-ignore
     }, [session?.user.id]);
 
     return (

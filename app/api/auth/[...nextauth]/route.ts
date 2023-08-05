@@ -7,16 +7,19 @@ import { connectToDB } from "@utils/database";
 const handler = NextAuth({
     providers: [
         GoogleProvider({
-            clientId: process.env.GOOGLE_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientId: process.env.GOOGLE_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
     ],
     callbacks: {
         async session({ session }) {
+            session = {
+                ...session,
+            };
             const sessionUser = await User.findOne({
                 email: session.user.email,
             });
-
+            // @ts-ignore
             session.user.id = sessionUser._id.toString();
 
             return session;
@@ -39,6 +42,7 @@ const handler = NextAuth({
                             .replace(/[\u0300-\u036f]/g, "")
                             .replace(" ", "")
                             .toLowerCase(),
+                        // @ts-ignore
                         image: profile.picture,
                     });
                 }
